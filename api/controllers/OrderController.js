@@ -175,3 +175,45 @@ const updateOrder = async (req, res) => {
         })
     }
 }
+
+// @desc    Delete order
+// @route   DELETE /api/v1/orders/:id
+// @access  Private
+
+const deleteOrder = async (req, res) => {
+    try {
+        let order = await Order.findById(req.params.id);
+
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: 'Order not found'
+            });
+        }
+
+        // Restore stock quantities
+        for (let item of order.productDetails) {
+            const product = await Product.findById(item.product);
+            if (product) {
+                product.qtyOnHand += item.quantity;
+                await product.save();
+            }
+        }
+
+        await Order.findByIdAndDelete(req.params.id);
+
+        res.status(200).json({
+                success: true,
+                data: {},
+                message: 'Order deleted successfully'
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        })
+    }
+}
+
+       
