@@ -216,4 +216,10 @@ const deleteOrder = async (req, res) => {
     }
 }
 
-       
+module.exports = {
+    getOrders,
+    getOrder,
+    createOrder,
+    updateOrder,
+    deleteOrder
+}       
