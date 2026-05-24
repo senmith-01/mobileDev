@@ -101,7 +101,7 @@ const login= async(req, res)=>{
             data:{
                 _id: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email,
                 token: generateToken(user._id)
             }
         })
@@ -112,4 +112,29 @@ const login= async(req, res)=>{
             message:error.message
         });
     }
+}
+
+// @desc Get current logged in user
+// @route GET /api/v1/auth/me
+// @access Private
+
+const getMe= async(req, res)=>{
+    try{
+        const user= await User.findById(req.user.id);
+        res.status(200).json({
+            success: true,
+            data:user
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error:error.message
+        });
+    }
+}
+
+module.exports={
+    signup,
+    login,
+    getMe
 }
