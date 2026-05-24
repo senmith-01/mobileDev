@@ -20,6 +20,9 @@ app.use(cors());
 
 // Routes
 app.use('/api/v1/auth', require('./routes/authRoutes'));
+app.use('/api/v1/products', require('./routes/ProductRoutes'));
+app.use('/api/v1/customers', require('./routes/CustomerRoutes'));
+app.use('/api/v1/orders', require('./routes/OrderRoutes'));
 
 // Root route
 app.get('/', (req, res)=>{
