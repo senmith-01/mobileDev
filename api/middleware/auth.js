@@ -14,10 +14,16 @@ const protect= async(req, res, next)=>{
 
             // Get user from the token
             req.user= await User.findById(decoded.id).select('-password');
-            next();
+            if (!req.user) {
+                return res.status(401).json({
+                success: false,
+                message: 'User no longer exists'
+    });
+}
+            return next();
         } catch (error) {
             console.error(error);
-            res.status(401).json({
+            return res.status(401).json({
                 success: false,
                 message: 'Not authorized to access this route'
             })
